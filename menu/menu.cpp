@@ -13,41 +13,44 @@ void start_main_menu() {
 	int selected_item;
 	bool is_exit = 0;
 	while (1) {
-		std::cout << "TBD: massive output\n" << std::endl;
-		std::cout << "ГЛАВНОЕ МЕНЮ\n" << std::endl;
-		std::cout << "\t1. Создать массив." << std::endl;
-		std::cout << "\t2. Вставить." << std::endl;
-		std::cout << "\t3. Удалить." << std::endl;
-		std::cout << "\t4. Найти." << std::endl;
-		std::cout << "\t5. Заменить." << std::endl;
-		std::cout << "\t6. Перемешать массив." << std::endl;
-		std::cout << "\t7. Отсортировать массив." << std::endl;
-		std::cout << "\t0. Выход.\n" << std::endl;
+		if(size == 0){ std::cout << "TBD: massive output\n" << std::endl; }
+		else{
+			std::cout << "Ваш текущий массив: {";
+			printMassive(mass, size);
+		}		
+		 std::cout << "ГЛАВНОЕ МЕНЮ\n" << std::endl
+		 << "\t1. Создать массив." << std::endl
+		 << "\t2. Вставить." << std::endl
+		 << "\t3. Удалить." << std::endl
+		 << "\t4. Найти." << std::endl
+		 << "\t5. Заменить." << std::endl
+		 << "\t6. Перемешать массив." << std::endl
+		 << "\t7. Отсортировать массив." << std::endl
+		 << "\t0. Выход.\n" << std::endl;
+
 		get_selected_menu_item(&selected_item, MAIN_MENU_SIZE);
 		system("cls");
+
 		if (selected_item == EXIT) { break; }
 		switch (selected_item) {
 			case 1:
 				is_exit = start_init_menu(&mass, &size);
 				break;
-			/* ... */
-			case 4:
-			// просто пример!!! ненастоящее содержимое кейса!!!
-				int mass_example[10] = { 1, 2, 3, 2, 4, 5, 1, 5, 2, 2 }, size_example = 10;
-				int found_2_example[5] = { 4, 1, 3, 8, 9 };
-				int found_7_example[1] = { 0 };
-				std::cout << "Пример вывода для поиска значения 2 в массиве." << std::endl;
-				show_found_result(mass_example, size_example, found_2_example);
-				std::cout << "Пример вывода для поиска значения 7 в массиве." << std::endl;
-				show_found_result(mass_example, size_example, found_7_example);
-				break;
-				/* ... */
+			
 		}
 	}
 	if (mass != nullptr) { // лучше заранее прописать
 			delete[] mass;
 	}
 }
+
+void printMassive(int* p, int size) {
+    for (int i = 0; i < size-2; ++i) {
+        std::cout << *(p + i) << ", ";
+    }
+		std::cout << *(p + (size-1)) << " }"<< std::endl;
+}
+
 int start_init_menu(int** mass, int* size) {
 	int selected_item;
 	bool is_exit = 0, is_back = 0;
@@ -98,7 +101,7 @@ void get_selected_menu_item(int* menu_item, int item_count) {
 void get_size(int* size) {
 	std::cout << "Введите количество элементов: ";
 	while (1) {
-		td::cin >> *size;
+		std::cin >> *size;
 		if (*size > 0) {
 			break;
 		}

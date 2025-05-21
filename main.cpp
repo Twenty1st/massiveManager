@@ -7,6 +7,6 @@ int main() {
  setlocale(LC_ALL, "rus");
  srand(time(0));
  // запуск главного меню
- start_main_menu();
+ //start_main_menu();
  return 0;
 }
