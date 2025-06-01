@@ -1,23 +1,5 @@
 #include <iostream>
-
-void resize_array(int** arr, int* currentSize, int newSize) {
-    if (newSize < 0) {
-        std::cerr << "Новый размер не может быть отрицательным!" << std::endl;
-        return;
-    }
-
-		// Перераспределяем память для нового размера массива
-    int* new_arr = (int*)realloc(*arr, newSize * sizeof(int));
-    if (new_arr == nullptr) {
-        std::cout << "Ошибка!Память не выделена!" << std::endl;
-        return;
-    }
-
-    // Обновляем указатель и размер
-    *arr = new_arr;
-    *currentSize = newSize;
-}
-
+#include "../arrayUtils.h"
 
 void deleteAtStart(int** p, int* size, int countDelElems){
 	if (countDelElems >= *size) {
