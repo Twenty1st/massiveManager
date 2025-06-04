@@ -26,13 +26,6 @@ void deleteAtEnd(int** p, int* size, int countDelElems){
 }
 
 void deleteAtPosition(int** p, int* size, int* positions, int countDelElems) {
-    std::cout << "Debug: size = " << *size << ", countDelElems = " << countDelElems << std::endl;
-    std::cout << "Debug: positions = ";
-    for(int i = 0; i < countDelElems; i++) {
-        std::cout << positions[i] << " ";
-    }
-    std::cout << std::endl;
-
     // Проверяем корректность позиций
     for (int i = 0; i < countDelElems; ++i) {
         if (positions[i] < 1 || positions[i] > *size) {
@@ -43,27 +36,27 @@ void deleteAtPosition(int** p, int* size, int* positions, int countDelElems) {
 
     // Сортируем позиции
     sortMassive(positions, countDelElems);
-    std::cout << "Debug: sorted positions = ";
-    for(int i = 0; i < countDelElems; i++) {
-        std::cout << positions[i] << " ";
-    }
-    std::cout << std::endl;
 
-    int* newArray = new int[*size - countDelElems];
-    int delPosition = 0, newArrayIndex = 0;
+    // Создаем новый массив
+    int* newArray = (int*)malloc((*size - countDelElems) * sizeof(int));
+    if (newArray == nullptr) {
+        std::cout << "Ошибка выделения памяти!" << std::endl;
+        return;
+    }
+
+    int newIndex = 0;
+    int posIndex = 0;
 
     // Копируем элементы, пропуская удаляемые
     for (int i = 0; i < *size; ++i) {
-        if(positions[delPosition] >= i){
-            if (delPosition < countDelElems && i+1 == positions[delPosition]) {
-                delPosition++;
-                continue;
-            }
+        if (posIndex < countDelElems && i + 1 == positions[posIndex]) {
+            posIndex++;
+            continue;
         }
-        newArray[newArrayIndex++] = (*p)[i];
+        newArray[newIndex++] = (*p)[i];
     }
 
-    delete[] *p;
+    free(*p);
     *p = newArray;
-    *size = newArrayIndex;
+    *size = newIndex;
 }

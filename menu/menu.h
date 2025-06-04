@@ -12,5 +12,7 @@ void findSubmenu(int* mass, int size, int submenu_type);
 void replaceMenu(int* mass, int size);
 void replaceSubmenu1(int* mass, int size, int submenu_type);
 void replaceSubmenu2(int* mass, int size, int submenu_type, bool isOneElement);
+void replaceByIndicesSubmenu(int* mass, int size, int count);
+void replaceByValuesSubmenu(int* mass, int size, int count, int selected_item);
 
 #endif

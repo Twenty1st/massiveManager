@@ -121,7 +121,6 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
     int* newElems = nullptr;
 
     while (!is_back) {
-        std::cout << "Debug: Начало цикла" << std::endl;
         //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
@@ -133,7 +132,6 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
                   << "\t0. Выход.\n" << std::endl;
 
         get_selected_menu_item(&selected_item, INSERT_SUBMENU_SIZE);
-        std::cout << "Debug: После выбора пункта меню" << std::endl;
         //system("cls");
 
         if (selected_item == EXIT) { exit(0); }
@@ -149,13 +147,9 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
 
         // Освобождаем старую память если она есть
         if (newElems != nullptr) {
-            std::cout << "Debug: Освобождаем старую память" << std::endl;
             free(newElems);
             newElems = nullptr;
         }
-
-        // Выделяем новую память
-        std::cout << "Debug: Выделяем новую память" << std::endl;
         newElems = (int*)malloc(count * sizeof(int));
         if (newElems == nullptr) {
             std::cout << "Ошибка выделения памяти!" << std::endl;
@@ -170,18 +164,16 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
             continue;
         }
 
-        std::cout << "Debug: Перед switch" << std::endl;
         switch (selected_item) {
             case 1:
-                std::cout << "Debug: Перед insertInStart" << std::endl;
-                insertInStart(&mass, &size, newElems, count);
-                std::cout << "Debug: После insertInStart" << std::endl;
-                print_insert_result(mass, size, count, 0, 1);  // 1 - в начало
-                std::cout << "Debug: После print_insert_result" << std::endl;
+                insertInStartTest(&mass, &size, newElems, count);
+                print_insert_result(mass, size, count, 0, 1);  
+                is_back = true;
                 break;
             case 2:
                 insertInEnd(&mass, &size, newElems, count);
-                print_insert_result(mass, size, count, 0, 2);  // 2 - в конец
+                print_insert_result(mass, size, count, 0, 2);
+                is_back = true;
                 break;
             case 3:
                 int position;
@@ -193,7 +185,8 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
                     break;
                 }
                 insertInPosition(&mass, &size, newElems, count, position);
-                print_insert_result(mass, size, count, position, 3);  // 3 - по позиции
+                print_insert_result(mass, size, count, position, 3);
+                is_back = true;
                 break;
             case 4:
                 is_back = true;
@@ -201,15 +194,12 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
             case 0:
                 exit(0);
         }
-        std::cout << "Debug: После switch" << std::endl;
     }
 
     // Освобождаем память при выходе из функции
     if (newElems != nullptr) {
-        std::cout << "Debug: Освобождаем память при выходе" << std::endl;
         free(newElems);
     }
-    std::cout << "Debug: Конец функции" << std::endl;
 }
 
 // Функция для получения позиций для удаления
@@ -220,21 +210,21 @@ int* getPositionsForDeletion(int count, int submenu_type, bool& is_back) {
         is_back = true;
         return nullptr;
     }
+
     if (submenu_type == 2) {
-        std::cout << "Введите позиции для удаления: " << std::endl;
+        std::cout << "Введите позиции для удаления (нумерация с 1): " << std::endl;
         elements = getElementsFromUser(elements, count);
+        if (elements == nullptr) {
+            is_back = true;
+            return nullptr;
+        }
     } else {
-        std::cout << "Введите позицию для удаления: ";
+        std::cout << "Введите позицию для удаления (нумерация с 1): ";
         if(!getNumber(&elements[0])) {
             free(elements);
             is_back = true;
             return nullptr;
         }
-    }
-
-    if(elements == nullptr) {
-        is_back = true;
-        return nullptr;
     }
 
     return elements;
@@ -318,7 +308,7 @@ void deleteSubmenu(int*& mass, int& size, int submenu_type) {
                     int* elements = getPositionsForDeletion(count, submenu_type, is_back);
                     if (is_back) break;
                     deleteAtPosition(&mass, &size, elements, count);
-                    delete[] elements;
+                    free(elements);
                     break;
                 }
             }
@@ -514,6 +504,99 @@ void replaceSubmenu1(int* mass, int size, int submenu_type) {
     }
 }
 
+void replaceByIndicesSubmenu(int* mass, int size, int count) {
+    // Получаем индексы для замены
+    int* indices = (int*)malloc(count * sizeof(int));
+    if (indices == nullptr) {
+        std::cout << "Ошибка выделения памяти!" << std::endl;
+        return;
+    }
+
+    std::cout << "Введите индексы элементов для замены (нумерация с 0): " << std::endl;
+    indices = getElementsFromUser(indices, count);
+    if(indices == nullptr) {
+        return;
+    }
+
+    // Получаем новые значения
+    int* newValues = (int*)malloc(count * sizeof(int));
+    if (newValues == nullptr) {
+        std::cout << "Ошибка выделения памяти!" << std::endl;
+        free(indices);
+        return;
+    }
+
+    std::cout << "Введите новые значения для этих элементов: " << std::endl;
+    newValues = getElementsFromUser(newValues, count);
+    if(newValues == nullptr) {
+        free(indices);
+        return;
+    }
+
+    // Выполняем замену
+    replaceByIndices(mass, size, indices, newValues, count);
+    
+    free(indices);
+    free(newValues);
+}
+
+void replaceByValuesSubmenu(int* mass, int size, int count, int selected_item) {
+    // Получаем элементы для замены
+    int* elements = (int*)malloc(count * sizeof(int));
+    if (elements == nullptr) {
+        std::cout << "Ошибка выделения памяти!" << std::endl;
+        return;
+    }
+
+    std::cout << "Введите элементы, которые нужно заменить: " << std::endl;
+    elements = getElementsFromUser(elements, count);
+    if(elements == nullptr) {
+        return;
+    }
+    
+    std::cout << "Вы хотите заменить элемент(-ы): ";
+    printMassive(elements, count);
+    
+    // Получаем новые значения
+    int* newValues = (int*)malloc(count * sizeof(int));
+    if (newValues == nullptr) {
+        std::cout << "Ошибка выделения памяти!" << std::endl;
+        free(elements);
+        return;
+    }
+
+    std::cout << "Введите новые значения для этих элементов: " << std::endl;
+    newValues = getElementsFromUser(newValues, count);
+    if(newValues == nullptr) {
+        free(elements);
+        return;
+    }
+
+    std::cout << "на соответствующие элемент(-ы): ";
+    printMassive(newValues, count);
+
+    // Создаем map для замены
+    std::map<int, int> replaceValues;
+    for(int i = 0; i < count; i++) {
+        replaceValues[elements[i]] = newValues[i];
+    }
+
+    switch (selected_item) {
+        case 1:
+            replaceFirstEntry(mass, size, replaceValues);
+            break;
+        case 2:
+            replaceLastEntry(mass, size, replaceValues);
+            break;
+        case 3:
+            replaceAllEntry(mass, size, replaceValues);
+            break;
+    }
+
+    free(elements);
+    free(newValues);
+}
+
 void replaceSubmenu2(int* mass, int size, int submenu_type, bool isOneElement) {
     int selected_item;
     bool is_back = false;
@@ -544,89 +627,13 @@ void replaceSubmenu2(int* mass, int size, int submenu_type, bool isOneElement) {
             }
         }
 
-        // Получаем элементы для замены
-        int* elements = (int*)malloc(count * sizeof(int));
-        if (elements == nullptr) {
-            std::cout << "Ошибка выделения памяти!" << std::endl;
+        if (submenu_type == 1) { // Замена по индексам
+            replaceByIndicesSubmenu(mass, size, count);
             is_back = true;
-            continue;
-        }
-        if (!isOneElement) {
-            // Для множественной замены получаем несколько элементов
-            std::cout << "Введите элементы, которые нужно заменить: " << std::endl;
-            elements = getElementsFromUser(elements, count);
-        } else {
-            // Для одиночной замены получаем один элемент
-            std::cout << "Введите элемент для замены: ";
-            if(!getNumber(&elements[0])) {
-                free(elements);
-                is_back = true;
-                continue;
-            }
-        }
-
-        if(elements == nullptr) {
+        } else { // Замена по значениям
+            replaceByValuesSubmenu(mass, size, count, selected_item);
             is_back = true;
-            continue;
         }
-        
-        std::cout << "Вы хотите заменить элемент(-ы): ";
-        printMassive(elements, count);
-        
-        // Получаем новые значения
-        int* newValues = (int*)malloc(count * sizeof(int));
-        if (newValues == nullptr) {
-            std::cout << "Ошибка выделения памяти!" << std::endl;
-            free(elements);
-            is_back = true;
-            continue;
-        }
-        if (submenu_type == 2) {
-            // Для множественной замены получаем несколько новых значений
-            std::cout << "Введите новые значения для этих элементов: " << std::endl;
-            newValues = getElementsFromUser(newValues, count);
-        } else {
-            // Для одиночной замены получаем одно новое значение
-            std::cout << "Введите новое значение: ";
-            if(!getNumber(&newValues[0])) {
-                free(elements);
-                free(newValues);
-                is_back = true;
-                continue;
-            }
-        }
-
-        if(newValues == nullptr) {
-            free(elements);
-            is_back = true;
-            continue;
-        }
-
-        std::cout << "на соответствующие элемент(-ы): ";
-        printMassive(newValues, count);
-
-        if (!is_back) {
-            // Создаем map для замены
-            std::map<int, int> replaceValues;
-            for(int i = 0; i < count; i++) {
-                replaceValues[elements[i]] = newValues[i];
-            }
-
-            switch (selected_item) {
-                case 1:
-                    replaceFirstEntry(mass, size, replaceValues);
-                    break;
-                case 2:
-                    replaceLastEntry(mass, size, replaceValues);
-                    break;
-                case 3:
-                    replaceAllEntry(mass, size, replaceValues);
-                    break;
-            }
-        }
-
-        free(elements);
-        free(newValues);
     }
 }
 

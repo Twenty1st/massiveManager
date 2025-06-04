@@ -20,9 +20,9 @@ void readFromFile(int*& mass, int& size) {
 }
 
 void userInputMassive(int*& mass, int& size) {
-    std::cout << "Enter massive size: ";
+    std::cout << "Введите размер массива: ";
     if (!getNumber(&size) || size <= 0) {
-        std::cout << "Invalid array size!" << std::endl;
+        std::cout << "Некорректный размер массива!" << std::endl;
         return;
     }
     
@@ -33,7 +33,7 @@ void userInputMassive(int*& mass, int& size) {
     }
     
     for (int i = 0; i < size; ++i) {
-        std::cout << "Enter element " << i << ": ";
+        std::cout << "Введите элемент " << i << ": ";
         if (!getNumber(&mass[i])) {
             free(mass);
             mass = nullptr;

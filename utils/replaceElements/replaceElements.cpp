@@ -4,14 +4,17 @@
 
 
 void replaceByIndices(int* mass, int size, const int indices[], const int newValues[], int count) {
-		int replaceIndex = 0;
+    // Проверяем корректность всех индексов
     for(int i = 0; i < count; i++) {
-				if (indices[replaceIndex] >= 0 && indices[replaceIndex] < size && replaceIndex == i) {
-            mass[indices[replaceIndex]] = newValues[replaceIndex];
-						++replaceIndex;
-        } else {
-            std::cout << "Индекс " << indices[replaceIndex] << " выходит за границы массива" << std::endl;
+        if (indices[i] < 0 || indices[i] >= size) {
+            std::cout << "Индекс " << indices[i] << " выходит за границы массива" << std::endl;
+            return;
         }
+    }
+
+    // Выполняем замену
+    for(int i = 0; i < count; i++) {
+        mass[indices[i]] = newValues[i];
     }
 }
 
