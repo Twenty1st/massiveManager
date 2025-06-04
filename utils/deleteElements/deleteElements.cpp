@@ -1,28 +1,61 @@
 #include <iostream>
 #include "../arrayUtils.h"
 #include "../sort_shuffle_Massive/sort_shuffle_Massive.h"
+#include "../colorPrint.h"
 
-void deleteAtStart(int** p, int* size, int countDelElems){
-	if (countDelElems >= *size) {
-        resize_array(p, size, 0);
-        return;
-  }
-
-	// Сдвигаем существующие элементы вправо
-	for (int i = 0; i < *size; ++i) {
-			(*p)[i] = (*p)[i+countDelElems];
-	}
-
-	resize_array(p, size, *size - countDelElems);
+void print_delete_result(int* mass, int size, int* deleted_indices, int count) {
+    std::cout << "\nЭл-т(-ы) успешно удален(-ы)." << std::endl;
+    std::cout << "Результат: ";
+    print_array_with_highlight(mass, size, deleted_indices, count, COLOR_RED);
 }
 
-void deleteAtEnd(int** p, int* size, int countDelElems){
-	if (countDelElems >= *size) {
+void deleteAtStart(int** p, int* size, int countDelElems) {
+    if (countDelElems >= *size) {
+        int* deleted_indices = (int*)malloc(*size * sizeof(int));
+        for(int i = 0; i < *size; i++) {
+            deleted_indices[i] = i;
+        }
+        print_delete_result(*p, *size, deleted_indices, *size);
+        free(deleted_indices);
         resize_array(p, size, 0);
         return;
-  }
+    }
 
-  resize_array(p, size, *size - countDelElems);
+    int* deleted_indices = (int*)malloc(countDelElems * sizeof(int));
+    for(int i = 0; i < countDelElems; i++) {
+        deleted_indices[i] = i;
+    }
+
+    // Сдвигаем существующие элементы вправо
+    for (int i = 0; i < *size; ++i) {
+        (*p)[i] = (*p)[i+countDelElems];
+    }
+
+    print_delete_result(*p, *size, deleted_indices, countDelElems);
+    resize_array(p, size, *size - countDelElems);
+    free(deleted_indices);
+}
+
+void deleteAtEnd(int** p, int* size, int countDelElems) {
+    if (countDelElems >= *size) {
+        int* deleted_indices = (int*)malloc(*size * sizeof(int));
+        for(int i = 0; i < *size; i++) {
+            deleted_indices[i] = i;
+        }
+        print_delete_result(*p, *size, deleted_indices, *size);
+        free(deleted_indices);
+        resize_array(p, size, 0);
+        return;
+    }
+
+    int* deleted_indices = (int*)malloc(countDelElems * sizeof(int));
+    for(int i = 0; i < countDelElems; i++) {
+        deleted_indices[i] = *size - countDelElems + i;
+    }
+
+    print_delete_result(*p, *size, deleted_indices, countDelElems);
+    resize_array(p, size, *size - countDelElems);
+    free(deleted_indices);
 }
 
 void deleteAtPosition(int** p, int* size, int* positions, int countDelElems) {
@@ -56,6 +89,7 @@ void deleteAtPosition(int** p, int* size, int* positions, int countDelElems) {
         newArray[newIndex++] = (*p)[i];
     }
 
+    print_delete_result(*p, *size, positions, countDelElems);
     free(*p);
     *p = newArray;
     *size = newIndex;

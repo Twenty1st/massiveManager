@@ -357,7 +357,6 @@ void findSubmenu(int* mass, int size, int submenu_type) {
     bool is_back = false;
 
     while (!is_back) {
-        //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
         std::cout << "ВТОРОЕ МЕНЮ ПОИСКА\n" << std::endl
@@ -368,7 +367,6 @@ void findSubmenu(int* mass, int size, int submenu_type) {
                   << "\t0. Выход.\n" << std::endl;
 
         get_selected_menu_item(&selected_item, FIND_SUBMENU_SIZE);
-        //system("cls");
 
         if (selected_item == EXIT) { exit(0); }
         if (selected_item == BACK) { is_back = true; continue; }
@@ -391,11 +389,10 @@ void findSubmenu(int* mass, int size, int submenu_type) {
         }
         elements = getElementsFromUser(elements, count);
         if(elements == nullptr) {
+            free(elements);
             is_back = true;
             continue;
         }
-
-        
 
         std::stack<int> result;
         switch (selected_item) {
@@ -417,14 +414,19 @@ void findSubmenu(int* mass, int size, int submenu_type) {
 
         // Вывод результатов поиска
         if(result.empty()) {
-            std::cout << "Элементы не найдены." << std::endl;
+            std::cout << "\nЭлементы не найдены." << std::endl;
         } else {
-            std::cout << "Найдены элементы на позициях: ";
-            while(!result.empty()) {
-                std::cout << result.top() << " ";
-                result.pop();
+            // Создаем массив индексов для вывода
+            int* found_indices = (int*)malloc(result.size() * sizeof(int));
+            if (found_indices != nullptr) {
+                int count = 0;
+                while(!result.empty()) {
+                    found_indices[count++] = result.top() - 1; // -1 потому что в стеке индексы с 1
+                    result.pop();
+                }
+                print_search_result(mass, size, found_indices, count);
+                free(found_indices);
             }
-            std::cout << std::endl;
         }
 
         free(elements);

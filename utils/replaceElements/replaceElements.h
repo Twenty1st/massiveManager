@@ -4,6 +4,7 @@
 #include <map>
 
 // Объявление функций
+void print_replace_result(int* mass, int size, int* replaced_indices, int count);
 void replaceByIndices(int* mass, int size, const int indices[], const int newValues[], int count);
 void replaceFirstEntry(int* mass, int size, std::map<int, int> replaceValues);
 void replaceLastEntry(int* mass, int size, std::map<int, int> replaceValues);
