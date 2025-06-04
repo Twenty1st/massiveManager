@@ -36,4 +36,30 @@ int getUserIndex(int* size){
 	return index;
 }
 
+bool getCountForInsert(int* count) {
+    while(true) {
+        if(!getNumber(count)) {
+            return false;
+        } 
+        if(*count <= 0) {
+            std::cout << "Некорректное значение, повторите ввод: ";
+        } else {
+            return true;
+        }
+    }
+}
+
+bool getCountForOperation(int* count, int size) {
+    while(true) {
+        if(!getNumber(count)) {
+            return false;
+        } 
+        if(*count <= 0 || *count > size) {
+            std::cout << "Некорректное значение, повторите ввод: ";
+        } else {
+            return true;
+        }
+    }
+}
+
 

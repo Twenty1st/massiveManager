@@ -1,11 +1,11 @@
-#ifndef insertElements_H
-#define insertElements_H
+#pragma once
 
 #include <stack>
 
 // Объявление функций
-void insertInStart(int** p, int* size, const int newElems[], int sizeNewElems);
-void insertInEnd(int** p, int* size, const int newElems[], int sizeNewElems);
-void insertInPosition(int** p, int* size, const int newElems[], int sizeNewElems, int position);
+void insertInStart(int** mas, int* size, const int newElems[], int sizeNewElems);
+void insertInEnd(int** mas, int* size, const int newElems[], int sizeNewElems);
+void insertInPosition(int** mas, int* size, const int newElems[], int sizeNewElems, int position);
+void print_insert_result(const int* arr, int size, int count, int position, int insert_type);
 
-#endif 
+// #endif 

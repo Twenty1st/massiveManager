@@ -11,6 +11,12 @@ void resize_array(int** arr, int* current_size, int new_size) {
     int* new_arr = (int*)realloc(*arr, new_size * sizeof(int));
     if (new_arr == nullptr) {
         std::cout << "Ошибка!Память не выделена!" << std::endl;
+        // Освобождаем старую память
+        if (*arr != nullptr) {
+            free(*arr);
+        }
+        *arr = nullptr; 
+        *current_size = 0;
         return;
     }
 

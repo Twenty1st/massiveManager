@@ -1,29 +1,15 @@
-#include <stdlib.h> // srand, NULL
-#include <time.h>   // time
-#include <locale.h> // setlocale
-#include <iostream> // cerr, endl
-#include <stdexcept> // exception
-#include <windows.h> // для SetConsoleCP и SetConsoleOutputCP
+#include <stdlib.h>
+#include <windows.h>
+#include <time.h>
+#include <locale.h>
+#include <iostream>
 #include "menu/menu.h"
 
 int main() {
-    // Установка кодировки UTF-8 для консоли
-    SetConsoleCP(65001); // CP_UTF8
-    SetConsoleOutputCP(65001); // CP_UTF8
-
-    setlocale(LC_ALL, "ru_RU.UTF-8");
-
+    SetConsoleOutputCP(CP_UTF8); // установить UTF-8 как кодировку вывода
+    std::setlocale(LC_ALL, "ru_RU.UTF-8"); // или ""
+   //setlocale(LC_ALL, "rus");
     srand(time(0));
-
-    try {
-        start_main_menu();
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
-    } catch (...) {
-        std::cerr << "Unknown error occurred" << std::endl;
-        return 1;
-    }
-
+    start_main_menu();
     return 0;
 }

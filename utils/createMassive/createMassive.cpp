@@ -26,11 +26,16 @@ void userInputMassive(int*& mass, int& size) {
         return;
     }
     
-    mass = new int[size];
+    mass = (int*)malloc(size * sizeof(int));
+    if (mass == nullptr) {
+        std::cout << "Ошибка выделения памяти!" << std::endl;
+        return;
+    }
+    
     for (int i = 0; i < size; ++i) {
         std::cout << "Enter element " << i << ": ";
         if (!getNumber(&mass[i])) {
-            delete[] mass;
+            free(mass);
             mass = nullptr;
             size = 0;
             return;
