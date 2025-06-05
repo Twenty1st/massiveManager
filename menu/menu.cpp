@@ -7,7 +7,7 @@
 #include "../utils/sort_shuffle_Massive/sort_shuffle_Massive.h"
 #include "../utils/insertElements/insertElements.h"
 #include "../utils/deleteElements/deleteElements.h"
-#include "../utils/searchElements/searchElements.h"
+#include "../utils/findElements/findElements.h"
 #include "../utils/replaceElements/replaceElements.h"
 #include "../utils/createMassive/createMassive.h"
 #include "../getUserInput/getInput.h"
@@ -51,16 +51,6 @@ void get_selected_menu_item(int* menu_item, int item_count) {
         std::cout << "Некорректный ввод, попробуйте снова: ";
     }
     if (*menu_item == item_count) *menu_item = BACK;
-}
-
-int* getElementsFromUser(int* elements, int maxSize) {    
-    for(int i = 0; i < maxSize; i++) {
-        if(!getNumber(&elements[i])) {
-            free(elements);
-            return nullptr;
-        }
-    }
-    return elements;
 }
 
 void printMassive(int* p, int size) {
@@ -371,39 +361,22 @@ void findSubmenu(int* mass, int size, int submenu_type) {
         if (selected_item == EXIT) { exit(0); }
         if (selected_item == BACK) { is_back = true; continue; }
 
-        int count = 1;
-        if(submenu_type == 2) {
-            std::cout << "Введите количество элементов для поиска: ";
-            if(!getCountForOperation(&count, size)) {
-                is_back = true;
-                continue;
-            }
-        }
+        int count = getFindCount(submenu_type, size, is_back);
+        if (is_back) continue;
 
-        std::cout << "Введите элементы для поиска: " << std::endl;
-        int* elements = (int*)malloc(count * sizeof(int));
-        if (elements == nullptr) {
-            std::cout << "Ошибка выделения памяти!" << std::endl;
-            is_back = true;
-            continue;
-        }
-        elements = getElementsFromUser(elements, count);
-        if(elements == nullptr) {
-            free(elements);
-            is_back = true;
-            continue;
-        }
+        int* elements = getFindElements(count, is_back);
+        if (is_back) continue;
 
         std::stack<int> result;
         switch (selected_item) {
             case 1:
-                result = searchFirstEntry(mass, size, elements, count);
+                result = findFirstEntry(mass, size, elements, count);
                 break;
             case 2:
-                result = searchLastEntry(mass, size, elements, count);
+                result = findLastEntry(mass, size, elements, count);
                 break;
             case 3:
-                result = searchAllEntry(mass, size, elements, count);
+                result = findAllEntry(mass, size, elements, count);
                 break;
             case 4:
                 is_back = true;
@@ -412,23 +385,7 @@ void findSubmenu(int* mass, int size, int submenu_type) {
                 exit(0);
         }
 
-        // Вывод результатов поиска
-        if(result.empty()) {
-            std::cout << "\nЭлементы не найдены." << std::endl;
-        } else {
-            // Создаем массив индексов для вывода
-            int* found_indices = (int*)malloc(result.size() * sizeof(int));
-            if (found_indices != nullptr) {
-                int count = 0;
-                while(!result.empty()) {
-                    found_indices[count++] = result.top() - 1; // -1 потому что в стеке индексы с 1
-                    result.pop();
-                }
-                print_search_result(mass, size, found_indices, count);
-                free(found_indices);
-            }
-        }
-
+        print_find_result(mass, size, result);
         free(elements);
     }
 }
