@@ -2,6 +2,7 @@
 #include <stack>
 #include <map>
 #include "../colorPrint.h"
+#include "../../getUserInput/getInput.h"
 
 void print_replace_result(int* mass, int size, int* replaced_indices, int count) {
     std::cout << "\nЭл-т(-ы) успешно заменен(-ы)." << std::endl;
@@ -89,4 +90,55 @@ void replaceAllEntry(int* mass, int size, std::map<int, int> replaceValues) {
         print_replace_result(mass, size, replaced_indices, count);
     }
     free(replaced_indices);
+}
+
+int* getReplaceIndices(int count, bool& is_back) {
+    std::cout << "Введите индексы элементов для замены (нумерация с 0): " << std::endl;
+    int* indices = (int*)malloc(count * sizeof(int));
+    if (indices == nullptr) {
+        std::cout << "Ошибка выделения памяти!" << std::endl;
+        is_back = true;
+        return nullptr;
+    }
+    indices = getElementsFromUser(indices, count);
+    if(indices == nullptr) {
+        free(indices);
+        is_back = true;
+        return nullptr;
+    }
+    return indices;
+}
+
+int* getReplaceValues(int count, bool& is_back) {
+    std::cout << "Введите новые значения для этих элементов: " << std::endl;
+    int* newValues = (int*)malloc(count * sizeof(int));
+    if (newValues == nullptr) {
+        std::cout << "Ошибка выделения памяти!" << std::endl;
+        is_back = true;
+        return nullptr;
+    }
+    newValues = getElementsFromUser(newValues, count);
+    if(newValues == nullptr) {
+        free(newValues);
+        is_back = true;
+        return nullptr;
+    }
+    return newValues;
+}
+
+int* getElementsToReplace(int count, bool& is_back) {
+    std::cout << "Введите элементы, которые нужно заменить: " << std::endl;
+    int* elements = (int*)malloc(count * sizeof(int));
+    if (elements == nullptr) {
+        std::cout << "Ошибка выделения памяти!" << std::endl;
+        is_back = true;
+        return nullptr;
+    }
+    elements = getElementsFromUser(elements, count);
+    if(elements == nullptr) {
+        free(elements);
+        is_back = true;
+        return nullptr;
+    }
+    return elements;
 }

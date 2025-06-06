@@ -13,6 +13,7 @@
 #include "../getUserInput/getInput.h"
 #include <stack>
 #include <map>
+#include "menuTexts.h"
 
 #define MAIN_MENU_SIZE 8
 #define INIT_MENU_SIZE 5
@@ -81,11 +82,7 @@ void insertMenu(int*& mass, int& size) {
         //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "МЕНЮ ВСТАВКИ\n" << std::endl
-                  << "\t1. Вставить один элемент." << std::endl
-                  << "\t2. Вставить несколько элементов." << std::endl
-                  << "\t3. Назад." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printInsertMenu();
 
         get_selected_menu_item(&selected_item, INSERT_MENU_SIZE);
         //system("cls");
@@ -100,6 +97,11 @@ void insertMenu(int*& mass, int& size) {
             case 2:
                 insertSubmenu(mass, size, 2);
                 break;
+            case 3:
+                is_back = true;
+                break;
+            case 0:
+                exit(0);
         }
     }
 }
@@ -114,12 +116,7 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
         //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "ВТОРОЕ МЕНЮ ВСТАВКИ\n" << std::endl
-                  << "\t1. Вставить в начало." << std::endl
-                  << "\t2. Вставить в конец." << std::endl
-                  << "\t3. Вставить по указанной позиции." << std::endl
-                  << "\t4. Назад." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printInsertSubMenu();
 
         get_selected_menu_item(&selected_item, INSERT_SUBMENU_SIZE);
         //system("cls");
@@ -228,11 +225,7 @@ void deleteMenu(int*& mass, int& size) {
         //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "МЕНЮ УДАЛЕНИЯ\n" << std::endl
-                  << "\t1. Удалить один элемент." << std::endl
-                  << "\t2. Удалить несколько элементов." << std::endl
-                  << "\t3. Назад." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printDeleteMenu();
 
         get_selected_menu_item(&selected_item, DELETE_MENU_SIZE);
         //system("cls");
@@ -264,12 +257,7 @@ void deleteSubmenu(int*& mass, int& size, int submenu_type) {
         //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "ВТОРОЕ МЕНЮ УДАЛЕНИЯ\n" << std::endl
-                  << "\t1. Удалить из начала." << std::endl
-                  << "\t2. Удалить из конца." << std::endl
-                  << "\t3. Удалить по указанной позиции." << std::endl
-                  << "\t4. Назад." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printDeleteSubMenu();
 
         get_selected_menu_item(&selected_item, DELETE_SUBMENU_SIZE);
         //system("cls");
@@ -311,17 +299,11 @@ void findMenu(int* mass, int size) {
     bool is_back = false;
 
     while (!is_back) {
-        //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "МЕНЮ ПОИСКА\n" << std::endl
-                  << "\t1. Найти один элемент." << std::endl
-                  << "\t2. Найти несколько элементов." << std::endl
-                  << "\t3. Назад." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printFindMenu();
 
         get_selected_menu_item(&selected_item, FIND_MENU_SIZE);
-        //system("cls");
 
         if (selected_item == EXIT) { exit(0); }
         if (selected_item == BACK) { is_back = true; continue; }
@@ -349,12 +331,7 @@ void findSubmenu(int* mass, int size, int submenu_type) {
     while (!is_back) {
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "ВТОРОЕ МЕНЮ ПОИСКА\n" << std::endl
-                  << "\t1. Найти первое вхождение." << std::endl
-                  << "\t2. Найти последнее вхождение." << std::endl
-                  << "\t3. Найти все вхождения." << std::endl
-                  << "\t4. Назад." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printFindSubmenu();
 
         get_selected_menu_item(&selected_item, FIND_SUBMENU_SIZE);
 
@@ -398,11 +375,7 @@ void replaceMenu(int* mass, int size) {
         //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "МЕНЮ ЗАМЕНЫ\n" << std::endl
-                  << "\t1. Заменить один элемент." << std::endl
-                  << "\t2. Заменить несколько элементов." << std::endl
-                  << "\t3. Назад." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printReplaceMenu();
 
         get_selected_menu_item(&selected_item, REPLACE_MENU_SIZE);
         //system("cls");
@@ -435,11 +408,7 @@ void replaceSubmenu1(int* mass, int size, int submenu_type) {
         //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "ПЕРВОЕ ПОДМЕНЮ ЗАМЕНЫ\n" << std::endl
-                  << "\t1. Задать элемент(-ы) индексами (нумерация с нуля)." << std::endl
-                  << "\t2. Задать элемент(-ы) значениями." << std::endl
-                  << "\t3. Назад." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printReplaceSubMenu1();
 
         get_selected_menu_item(&selected_item, REPLACE_SUBMENU1_SIZE);
         //system("cls");
@@ -464,30 +433,15 @@ void replaceSubmenu1(int* mass, int size, int submenu_type) {
 }
 
 void replaceByIndicesSubmenu(int* mass, int size, int count) {
-    // Получаем индексы для замены
-    int* indices = (int*)malloc(count * sizeof(int));
-    if (indices == nullptr) {
-        std::cout << "Ошибка выделения памяти!" << std::endl;
-        return;
-    }
-
-    std::cout << "Введите индексы элементов для замены (нумерация с 0): " << std::endl;
-    indices = getElementsFromUser(indices, count);
-    if(indices == nullptr) {
-        return;
-    }
+    bool is_back = false;
+    
+    // Получаем индексы
+    int* indices = getReplaceIndices(count, is_back);
+    if (is_back) return;
 
     // Получаем новые значения
-    int* newValues = (int*)malloc(count * sizeof(int));
-    if (newValues == nullptr) {
-        std::cout << "Ошибка выделения памяти!" << std::endl;
-        free(indices);
-        return;
-    }
-
-    std::cout << "Введите новые значения для этих элементов: " << std::endl;
-    newValues = getElementsFromUser(newValues, count);
-    if(newValues == nullptr) {
+    int* newValues = getReplaceValues(count, is_back);
+    if (is_back) {
         free(indices);
         return;
     }
@@ -500,33 +454,18 @@ void replaceByIndicesSubmenu(int* mass, int size, int count) {
 }
 
 void replaceByValuesSubmenu(int* mass, int size, int count, int selected_item) {
+    bool is_back = false;
+    
     // Получаем элементы для замены
-    int* elements = (int*)malloc(count * sizeof(int));
-    if (elements == nullptr) {
-        std::cout << "Ошибка выделения памяти!" << std::endl;
-        return;
-    }
-
-    std::cout << "Введите элементы, которые нужно заменить: " << std::endl;
-    elements = getElementsFromUser(elements, count);
-    if(elements == nullptr) {
-        return;
-    }
+    int* elements = getElementsToReplace(count, is_back);
+    if (is_back) return;
     
     std::cout << "Вы хотите заменить элемент(-ы): ";
     printMassive(elements, count);
     
     // Получаем новые значения
-    int* newValues = (int*)malloc(count * sizeof(int));
-    if (newValues == nullptr) {
-        std::cout << "Ошибка выделения памяти!" << std::endl;
-        free(elements);
-        return;
-    }
-
-    std::cout << "Введите новые значения для этих элементов: " << std::endl;
-    newValues = getElementsFromUser(newValues, count);
-    if(newValues == nullptr) {
+    int* newValues = getReplaceValues(count, is_back);
+    if (is_back) {
         free(elements);
         return;
     }
@@ -564,12 +503,7 @@ void replaceSubmenu2(int* mass, int size, int submenu_type, bool isOneElement) {
         //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "ВТОРОЕ ПОДМЕНЮ ЗАМЕНЫ\n" << std::endl
-                  << "\t1. Заменить первое вхождение." << std::endl
-                  << "\t2. Заменить последнее вхождение." << std::endl
-                  << "\t3. Заменить все вхождения." << std::endl
-                  << "\t4. Назад." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printReplaceSubMenu2();
 
         get_selected_menu_item(&selected_item, REPLACE_SUBMENU2_SIZE);
         //system("cls");
@@ -604,13 +538,7 @@ void generateMassiveMenu(int*& mass, int& size, int& capacity) {
         //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "МЕНЮ СОЗДАНИЯ МАССИВА\n" << std::endl
-                  << "\t1. Заполнить тривиально." << std::endl
-                  << "\t2. Сгенерировать случайно." << std::endl
-                  << "\t3. Ввести элементы массива вручную." << std::endl
-                  << "\t4. Прочитать из файла." << std::endl
-                  << "\t5. Назад." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printCreateMassMenu();
 
         get_selected_menu_item(&selected_item, INIT_MENU_SIZE);
         //system("cls");
@@ -693,15 +621,7 @@ void start_main_menu() {
     while (!is_exit) {
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
-        std::cout << "ГЛАВНОЕ МЕНЮ\n" << std::endl
-                  << "\t1. Создать массив." << std::endl
-                  << "\t2. Вставить." << std::endl
-                  << "\t3. Удалить." << std::endl
-                  << "\t4. Найти." << std::endl
-                  << "\t5. Заменить." << std::endl
-                  << "\t6. Перемешать массив." << std::endl
-                  << "\t7. Отсортировать массив." << std::endl
-                  << "\t0. Выход.\n" << std::endl;
+        printMainMenu();
 
         get_selected_menu_item(&selected_item, MAIN_MENU_SIZE);
         //system("cls");

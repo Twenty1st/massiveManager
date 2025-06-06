@@ -1,9 +1,11 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include "menuTexts.h"
 
 bool getNumber(int* number) {
     std::string input;
+    std::cout << RETURN_TO_MENU << std::endl;
     while (true) {
         std::getline(std::cin, input);
 
