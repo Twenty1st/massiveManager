@@ -16,21 +16,6 @@ void shuffleMassive(int* mass, int size) {
 void sortMassive(int* mass, int size) {
     for (int i = 0; i < size - 1; ++i) {
         bool swapped = false;
-        for (int j = size - 1; j > i; --j) {
-            if (mass[j] < mass[i]) {
-                std::swap(mass[i], mass[j]);
-                swapped = true;
-            }
-        }
-        if (!swapped) {
-            break; // Массив уже отсортирован
-        }
-    }
-}
-
-void bubbleSort(int* mass, int size) {
-    for (int i = 0; i < size - 1; ++i) {
-        bool swapped = false;
         for (int j = 0; j < size - i - 1; ++j) {
             if (mass[j] > mass[j + 1]) {
                 std::swap(mass[j], mass[j + 1]);

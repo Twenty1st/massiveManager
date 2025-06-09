@@ -2,22 +2,23 @@
 #include "../arrayUtils.h"
 #include "insertElements.h"
 #include "../colorPrint.h"
+#include "../../getUserInput/getInput.h"
 
-void insertInStart(int** mas, int* size, const int newElems[], int sizeNewElems){
-	resize_array(mas, size, *size + sizeNewElems);
-	if (*mas == nullptr) {
-		return; // Если resize_array вернул ошибку, выходим
-	}
+void insertInStart(int** mas, int* size, int* newElems, int sizeNewElems){
+    resize_array(mas, size, *size + sizeNewElems);
+    if (*mas == nullptr) {
+        return; // Если resize_array вернул ошибку, выходим
+    }
 
-	// Сдвигаем существующие элементы вправо
-	for (int i = *size - 1; i >= 0; --i) {
-			(*mas)[i + sizeNewElems] = (*mas)[i];
-	}
+    // Сдвигаем существующие элементы вправо
+    for (int i = *size - 1; i >= 0; --i) {
+        (*mas)[i + sizeNewElems] = (*mas)[i];
+    }
 
-	// Вставляем новые элементы в начало массива
-	for (int i = 0; i < sizeNewElems; ++i) {
-			(*mas)[i] = newElems[i];
-	}
+    // Вставляем новые элементы в начало массива
+    for (int i = 0; i < sizeNewElems; ++i) {
+        (*mas)[i] = newElems[i];
+    }
 }
 
 void insertInEnd(int** mas, int* size, const int newElems[], int sizeNewElems){
@@ -33,10 +34,6 @@ void insertInEnd(int** mas, int* size, const int newElems[], int sizeNewElems){
 }
 
 void insertInPosition(int** mas, int* size, const int newElems[], int sizeNewElems, int position){
-    if (position < 1) {
-        std::cout << "Некорректная позиция для вставки." << std::endl;
-        return;
-    }
     
     position = position - 1;
     
@@ -63,23 +60,6 @@ void insertInPosition(int** mas, int* size, const int newElems[], int sizeNewEle
 
     for (int i = 0; i < sizeNewElems; ++i) {
         (*mas)[position + i] = newElems[i];
-    }
-}
-
-void insertInStartTest(int** mas, int* size, int* newElems, int sizeNewElems){
-    resize_array(mas, size, *size + sizeNewElems);
-    if (*mas == nullptr) {
-        return; // Если resize_array вернул ошибку, выходим
-    }
-
-    // Сдвигаем существующие элементы вправо
-    for (int i = *size - 1; i >= 0; --i) {
-        (*mas)[i + sizeNewElems] = (*mas)[i];
-    }
-
-    // Вставляем новые элементы в начало массива
-    for (int i = 0; i < sizeNewElems; ++i) {
-        (*mas)[i] = newElems[i];
     }
 }
 
@@ -123,4 +103,19 @@ void print_insert_result(const int* arr, int size, int count, int position, int 
     print_array_with_highlight(arr, size, highlight_indices, count, COLOR_GREEN);
     
     free(highlight_indices);
+}
+
+int getPositionToInsert() {
+    int position;
+    std::cout << "Введите позицию для вставки: ";
+    while(true) {
+        if(!getNumber(&position)) {
+            return -1;  // Пользователь нажал 'r' для возврата
+        }
+        if(position < 1) {
+            std::cout << "Некорректная позиция для вставки. Повторите ввод:" << std::endl;
+            continue;
+        }
+        return position;
+    }
 }

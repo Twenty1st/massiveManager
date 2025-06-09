@@ -110,6 +110,7 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
     int selected_item;
     bool is_back = false;
     int count = 1;
+    int position;
     int* newElems = nullptr;
 
     while (!is_back) {
@@ -125,6 +126,7 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
         if (selected_item == BACK) { is_back = true; continue; }
 
         if(submenu_type == 2) {
+            std::cout << RETURN_TO_MENU << std::endl;
             std::cout << "Введите количество элементов для вставки: ";
             if(!getCountForInsert(&count)) {
                 is_back = true;
@@ -144,6 +146,7 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
             continue;
         }
 
+        std::cout << RETURN_TO_MENU << std::endl;
         std::cout << "Введите элементы для вставки: " << std::endl;
         newElems = getElementsFromUser(newElems, count);
         if(newElems == nullptr) {
@@ -153,7 +156,7 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
 
         switch (selected_item) {
             case 1:
-                insertInStartTest(&mass, &size, newElems, count);
+                insertInStart(&mass, &size, newElems, count);
                 print_insert_result(mass, size, count, 0, 1);  
                 is_back = true;
                 break;
@@ -163,9 +166,8 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
                 is_back = true;
                 break;
             case 3:
-                int position;
-                std::cout << "Введите позицию для вставки: ";
-                if(!getNumber(&position)) {
+                position = getPositionToInsert();
+                if(position == -1) {
                     free(newElems);
                     newElems = nullptr;
                     is_back = true;
@@ -197,6 +199,8 @@ int* getPositionsForDeletion(int count, int submenu_type, bool& is_back) {
         is_back = true;
         return nullptr;
     }
+
+    std::cout << RETURN_TO_MENU << std::endl;
 
     if (submenu_type == 2) {
         std::cout << "Введите позиции для удаления (нумерация с 1): " << std::endl;
@@ -267,6 +271,7 @@ void deleteSubmenu(int*& mass, int& size, int submenu_type) {
 
         int count = 1;
         if (submenu_type == 2) {
+            std::cout << RETURN_TO_MENU << std::endl;
             std::cout << "Введите количество элементов для удаления: ";
             if(!getCountForOperation(&count, size)) {
                 is_back = true;
@@ -338,9 +343,11 @@ void findSubmenu(int* mass, int size, int submenu_type) {
         if (selected_item == EXIT) { exit(0); }
         if (selected_item == BACK) { is_back = true; continue; }
 
+        std::cout << RETURN_TO_MENU << std::endl;
         int count = getFindCount(submenu_type, size, is_back);
         if (is_back) continue;
 
+        std::cout << RETURN_TO_MENU << std::endl;
         int* elements = getFindElements(count, is_back);
         if (is_back) continue;
 
@@ -513,6 +520,7 @@ void replaceSubmenu2(int* mass, int size, int submenu_type, bool isOneElement) {
 
         int count = 1;
         if (!isOneElement) {
+            std::cout << RETURN_TO_MENU << std::endl;
             std::cout << "Введите количество элементов для замены: ";
             if(!getCountForOperation(&count, size)) {
                 is_back = true;
@@ -655,7 +663,7 @@ void start_main_menu() {
             case 7:
                 std::cout << size;
                 if (size > 0) {
-                    bubbleSort(mass, size);
+                    sortMassive(mass, size);
                 } else {
                     std::cout << "Массив пуст!" << std::endl;
                     system("pause");

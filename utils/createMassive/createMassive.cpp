@@ -1,7 +1,6 @@
 #include "createMassive.h"
 #include "../../getUserInput/getInput.h"
 #include <iostream>
-#include <fstream>
 
 void generateTrivialMassive(int* mass, int size) {
     for (int i = 0; i < size; ++i) {
@@ -13,10 +12,6 @@ void generateRandomMassive(int* mass, int size) {
     for (int i = 0; i < size; ++i) {
         mass[i] = rand() % 100;
     }
-}
-
-void readFromFile(int*& mass, int& size) {
-    
 }
 
 void userInputMassive(int*& mass, int& size) {
@@ -42,3 +37,4 @@ void userInputMassive(int*& mass, int& size) {
         }
     }
 }
+
