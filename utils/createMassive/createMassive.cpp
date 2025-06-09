@@ -28,7 +28,7 @@ void userInputMassive(int*& mass, int& size) {
     }
     
     for (int i = 0; i < size; ++i) {
-        std::cout << "Введите элемент " << i << ": ";
+        std::cout << "Введите элемент " << (i+1) << ": ";
         if (!getNumber(&mass[i])) {
             free(mass);
             mass = nullptr;

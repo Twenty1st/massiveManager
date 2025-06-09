@@ -2,18 +2,36 @@
 #include "../arrayUtils.h"
 #include "../sort_shuffle_Massive/sort_shuffle_Massive.h"
 #include "../colorPrint.h"
+#include "../../getUserInput/getInput.h"
 
-// int* copy_array(const int* source, int size) {
-//     int* copy = (int*)malloc(size * sizeof(int));
-//     if (!copy) {
-//         std::cerr << "Ошибка выделения памяти!" << std::endl;
-//         return nullptr;
-//     }
-//     for (int i = 0; i < size; ++i) {
-//         copy[i] = source[i];
-//     }
-//     return copy;
-// }
+// Функция для получения позиций для удаления
+int* getPositionsForDeletion(int count, int submenu_type, bool& is_back) {
+    int* elements = (int*)malloc(count * sizeof(int));
+    if (elements == nullptr) {
+        std::cout << "Ошибка выделения памяти!" << std::endl;
+        is_back = true;
+        return nullptr;
+    }
+
+    if (submenu_type == 2) {
+        std::cout << "Введите позиции для удаления (нумерация с 1): " << std::endl;
+        elements = getElementsFromUser(elements, count);
+        if (elements == nullptr) {
+            free(elements);
+            is_back = true;
+            return nullptr;
+        }
+    } else {
+        std::cout << "Введите позицию для удаления (нумерация с 1): ";
+        if(!getNumber(&elements[0])) {
+            free(elements);
+            is_back = true;
+            return nullptr;
+        }
+    }
+
+    return elements;
+}
 
 void print_delete_result(int* mass, int size, int* deleted_indices, int count) {
     std::cout << "\nЭл-т(-ы) успешно удален(-ы)." << std::endl;

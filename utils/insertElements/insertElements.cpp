@@ -79,6 +79,7 @@ void print_insert_result(const int* arr, int size, int count, int position, int 
     switch(insert_type) {
         case 1: // в начало
             for(int i = 0; i < count; i++) {
+                std::cout << "yes";
                 highlight_indices[i] = i;
             }
             std::cout << "Элементы успешно вставлены в начало." << std::endl;

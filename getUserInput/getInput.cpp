@@ -17,8 +17,10 @@ bool getNumber(int* number) {
             return true;
         } catch (const std::invalid_argument& e) {
             std::cout << "Ошибка: Введите число! Повторите ввод:" << std::endl;
+            std::cin.clear();
         } catch (const std::out_of_range& e) {
             std::cout << "Ошибка: Число вне допустимого диапазона! Повторите ввод:" << std::endl;
+            std::cin.clear();
         }
     }
 }
@@ -65,7 +67,6 @@ bool getCountForOperation(int* count, int size) {
 int* getElementsFromUser(int* elements, int maxSize) {    
     for(int i = 0; i < maxSize; i++) {
         if(!getNumber(&elements[i])) {
-            free(elements);
             return nullptr;
         }
     }

@@ -2,16 +2,10 @@
 #include "../../getUserInput/getInput.h"
 #include <iostream>
 #include <fstream>
-
-int countNumsInFile(std::ifstream& fin){
-    int count = 0;
-    int number;
-    while (fin >> number) {
-        count++;
-    }
-
-    return count;
-}
+#include <sstream>
+#include <string>
+#include <limits>
+#include <vector>
 
 bool isValidNumber(const std::string& str) {
     try {
@@ -32,29 +26,44 @@ void readFromFile(int*& mass, int& size) {
         return;
     }
 
-    int count = countNumsInFile(fin);
+    int count = 0;
+    std::string line;
+    while (std::getline(fin, line)) {
+        std::istringstream iss(line);
+        std::string token;
+        while (iss >> token) {
+            if (isValidNumber(token)) {
+                count++;
+            }
+        }
+    }
 
-		if (count == 0) {
-			std::cout << "Файл пуст или не содержит чисел!" << std::endl;
-			return;
-		}
+    if (count == 0) {
+        std::cout << "Файл пуст или не содержит чисел!" << std::endl;
+        fin.close();
+        return;
+    }
 
     fin.clear();
     fin.seekg(0);
-    
+
     mass = (int*)malloc(count * sizeof(int));
     if (mass == nullptr) {
         std::cout << "Ошибка выделения памяти!" << std::endl;
+        fin.close();
         return;
     }
-    
+
     size = 0;
-    std::string line;
     while (std::getline(fin, line)) {
-        if (isValidNumber(line)) {
-            mass[size++] = std::stoi(line);
-        } else {
-            std::cout << "Пропущено некорректное значение: " << line << std::endl;
+        std::istringstream iss(line);
+        std::string token;
+        while (iss >> token) {
+            if (isValidNumber(token)) {
+                mass[size++] = std::stoi(token);
+            } else {
+                std::cout << "Пропущено некорректное значение: " << token << std::endl;
+            }
         }
     }
 

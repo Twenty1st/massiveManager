@@ -120,7 +120,6 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
         printInsertSubMenu();
 
         get_selected_menu_item(&selected_item, INSERT_SUBMENU_SIZE);
-        //system("cls");
 
         if (selected_item == EXIT) { exit(0); }
         if (selected_item == BACK) { is_back = true; continue; }
@@ -148,8 +147,10 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
 
         std::cout << RETURN_TO_MENU << std::endl;
         std::cout << "Введите элементы для вставки: " << std::endl;
-        newElems = getElementsFromUser(newElems, count);
-        if(newElems == nullptr) {
+        int* temp = getElementsFromUser(newElems, count);
+        if(temp == nullptr) {
+            free(newElems);
+            newElems = nullptr;
             is_back = true;
             continue;
         }
@@ -183,43 +184,14 @@ void insertSubmenu(int*& mass, int& size, int submenu_type) {
             case 0:
                 exit(0);
         }
-    }
-
-    // Освобождаем память при выходе из функции
-    if (newElems != nullptr) {
-        free(newElems);
+        // Освобождаем память при выходе из функции
+        if (newElems != nullptr) {
+            free(newElems);
+        }
     }
 }
 
-// Функция для получения позиций для удаления
-int* getPositionsForDeletion(int count, int submenu_type, bool& is_back) {
-    int* elements = (int*)malloc(count * sizeof(int));
-    if (elements == nullptr) {
-        std::cout << "Ошибка выделения памяти!" << std::endl;
-        is_back = true;
-        return nullptr;
-    }
 
-    std::cout << RETURN_TO_MENU << std::endl;
-
-    if (submenu_type == 2) {
-        std::cout << "Введите позиции для удаления (нумерация с 1): " << std::endl;
-        elements = getElementsFromUser(elements, count);
-        if (elements == nullptr) {
-            is_back = true;
-            return nullptr;
-        }
-    } else {
-        std::cout << "Введите позицию для удаления (нумерация с 1): ";
-        if(!getNumber(&elements[0])) {
-            free(elements);
-            is_back = true;
-            return nullptr;
-        }
-    }
-
-    return elements;
-}
 
 void deleteMenu(int*& mass, int& size) {
     int selected_item;
@@ -288,6 +260,7 @@ void deleteSubmenu(int*& mass, int& size, int submenu_type) {
                     deleteAtEnd(&mass, &size, count);
                     break;
                 case 3: {
+                    std::cout << RETURN_TO_MENU << std::endl;
                     int* elements = getPositionsForDeletion(count, submenu_type, is_back);
                     if (is_back) break;
                     deleteAtPosition(&mass, &size, elements, count);
@@ -332,7 +305,7 @@ void findMenu(int* mass, int size) {
 void findSubmenu(int* mass, int size, int submenu_type) {
     int selected_item;
     bool is_back = false;
-
+    int* elements;
     while (!is_back) {
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
@@ -348,7 +321,7 @@ void findSubmenu(int* mass, int size, int submenu_type) {
         if (is_back) continue;
 
         std::cout << RETURN_TO_MENU << std::endl;
-        int* elements = getFindElements(count, is_back);
+        elements = getFindElements(count, is_back);
         if (is_back) continue;
 
         std::stack<int> result;
@@ -543,13 +516,11 @@ void generateMassiveMenu(int*& mass, int& size, int& capacity) {
     bool is_back = false;
 
     while (!is_back) {
-        //system("cls");
         std::cout << "Ваш текущий массив: ";
         printMassive(mass, size);
         printCreateMassMenu();
 
         get_selected_menu_item(&selected_item, INIT_MENU_SIZE);
-        //system("cls");
 
         if (selected_item == EXIT) { exit(0); }
         if (selected_item == BACK) { is_back = true; continue; }
@@ -609,6 +580,7 @@ void generateMassiveMenu(int*& mass, int& size, int& capacity) {
                 capacity = size;
                 break;
             case 4:
+                readFromFile(mass, size);
                 break;
             case 5:
                 is_back = true;
@@ -617,6 +589,7 @@ void generateMassiveMenu(int*& mass, int& size, int& capacity) {
                 exit(0);
         }
     }
+
 }
 
 void start_main_menu() {
